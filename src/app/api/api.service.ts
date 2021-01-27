@@ -89,14 +89,39 @@ export class ApiService {
   }
 
   sendMsg(id: string, to:string, from:string, msg: string) {
-    this.db.collection("chatRoom/").doc(`${to}_${from}`).set({
-      to: (to) ? to : 'admin',
-      from: (from) ? from : 'admin',
-      id: this.generateRandomString(16),
-      msg: msg,
-      timestamp: firebase.firestore.FieldValue.serverTimestamp()
-    });
-    
+    // let find = this.db.getCollectionNames()
+    //   .filter(function (collection) { 
+    //     return /to_from|from_to/is.test(collection) 
+    // let data = this.db.collection('chatRoom')
+    this.db.collection("chatRoom")
+      .onSnapshot((querySnapshot)=> {
+          querySnapshot.forEach((result) => {
+            console.log(result.data());
+          });
+      });
+
+    // data.get()
+    //   .then((docSnapshot) => {
+    //     if (docSnapshot.exists) {
+    //       data.onSnapshot((doc) => {
+    //         console.log("ada : " + doc.data())
+    //         // do stuff with the data
+    //       });
+    //     } else {
+    //       console.log("gada")
+    //     }
+    //   });
+
+    // this.db.collection("chatRoom/")
+    //   .doc(`${to}_${from}`)
+    //   .collection(`chatHistory`)
+    //   .doc(`${to}_${from}-${this.generateRandomString(5)}`)
+    //   .set({
+    //     to: (to) ? to : 'admin',
+    //     from: (from) ? from : 'admin',
+    //     msg: msg,
+    //     timestamp: firebase.firestore.FieldValue.serverTimestamp()
+    //   });
   }
 
   generateRandomString(length) {

@@ -48,21 +48,32 @@ export class HomePage implements OnInit {
       this.availableList = [];
 
       querySnapshot.forEach((doc) =>{
-        this.availableList.push(doc.data());
+        let dataDoc = doc.data();
+
+        this.availableList.push(dataDoc);
         this.api.db.collection("chatRoom")
-          .where("id", "==", doc.id) 
-          .orderBy("timestamp", "desc")
-          .limit(1)
-          .onSnapshot((querySnapshot)=> {
-              querySnapshot.forEach((result) => {
-                this.usersList.push({
-                  user: doc.data(),
-                  lastMSG: result.data()
-                });
-              });
+          .doc(`${dataDoc.id}_${this.session}`)
+          .onSnapshot((chatRoom)=> {
+              console.log(chatRoom.data())
           });
+
+
+        // this.api.db.collection("chatRoom")
+        //   .where("id", "==", doc.id) 
+        //   .orderBy("timestamp", "desc")
+        //   .limit(1)
+        //   .onSnapshot((querySnapshot)=> {
+        //       querySnapshot.forEach((result) => {
+        //         this.usersList.push({
+        //           user: doc.data(),
+        //           lastMSG: result.data()
+        //         });
+        //       });
+        //   });
       });
     });
+
+    console.log(this.availableList);
   }
 
   openChat(usr: any){
